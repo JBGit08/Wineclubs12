@@ -30,7 +30,7 @@ export default function WineClubsSection() {
     setLoading(true)
     setError(null)
     
-    try {
+    try {console.log("About to fetch from Airtable...", AIRTABLE_TOKEN.substring(0, 10))
       const response = await fetch(
         `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}`,
         {
