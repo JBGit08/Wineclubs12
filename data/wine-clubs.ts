@@ -33,7 +33,8 @@ export interface WineClub {
 }
 
 /* -- a handful of genuine-looking seed records that begin with "A" -- */
-const seeds: WineClub[] = [ {
+const seeds: WineClub[] = [
+  {
     id: "opus-one-membership",
     winery: "Opus One",
     clubName: "Opus One Membership",
@@ -54,17 +55,17 @@ const seeds: WineClub[] = [ {
   },
   {
     id: "caymus-club",
-    winery: "Caymus Vineyards",
-    clubName: "Caymus Club", 
+    winery: "Caymus Vineyards", 
+    clubName: "Caymus Club",
     description: "Access to Caymus family wines including their renowned Cabernet Sauvignon.",
     priceRange: "$300/year",
-    frequency: "Quarterly",
+    frequency: "Quarterly", 
     memberCount: "15,000+ members",
     varietals: ["Cabernet Sauvignon", "Zinfandel", "Pinot Noir"],
     benefits: ["Member pricing", "First access", "Special releases", "Tasting room priority"],
     specialty: "Napa Valley Cabernet Sauvignon",
     clubType: "signature",
-    region: "Napa Valley", 
+    region: "Napa Valley",
     subRegion: "Rutherford",
     established: 1972,
     website: "https://caymus.com",
@@ -74,9 +75,9 @@ const seeds: WineClub[] = [ {
   {
     id: "silver-oak-wine-club",
     winery: "Silver Oak",
-    clubName: "Silver Oak Wine Club",
+    clubName: "Silver Oak Wine Club", 
     description: "Celebrating American oak-aged Cabernet Sauvignon from Napa Valley.",
-    priceRange: "$280/year", 
+    priceRange: "$280/year",
     frequency: "Quarterly",
     memberCount: "25,000+ members",
     varietals: ["Cabernet Sauvignon"],
@@ -84,10 +85,10 @@ const seeds: WineClub[] = [ {
     specialty: "American oak-aged Cabernet",
     clubType: "signature",
     region: "Napa Valley",
-    subRegion: "Oakville", 
+    subRegion: "Oakville",
     established: 1972,
     website: "https://silveroak.com",
-    phone: "(707) 942-7022",
+    phone: "(707) 942-7022", 
     address: "915 Oakville Cross Rd, Oakville CA 94562"
   },
   {
@@ -96,16 +97,16 @@ const seeds: WineClub[] = [ {
     clubName: "Stag's Leap Wine Cellars Club",
     description: "Home of the legendary 1973 Cabernet that won the 1976 Paris Tasting.",
     priceRange: "$450/year",
-    frequency: "Quarterly", 
+    frequency: "Quarterly",
     memberCount: "8,000 members",
     varietals: ["Cabernet Sauvignon", "Chardonnay", "Sauvignon Blanc", "Merlot"],
     benefits: ["Historic library wines", "Vineyard tours", "Member events", "Priority allocation"],
     specialty: "Historic Stags Leap District Cabernet",
     clubType: "premium",
     region: "Napa Valley",
-    subRegion: "Stags Leap District",
+    subRegion: "Stags Leap District", 
     established: 1970,
-    website: "https://cask23.com", 
+    website: "https://cask23.com",
     phone: "(707) 261-6410",
     address: "5766 Silverado Trail, Napa CA 94558"
   },
@@ -114,9 +115,9 @@ const seeds: WineClub[] = [ {
     winery: "Chateau Montelena",
     clubName: "Chateau Montelena Wine Club",
     description: "Historic winery famous for the 1973 Chardonnay that triumphed in Paris.",
-    priceRange: "$380/year",
+    priceRange: "$380/year", 
     frequency: "Quarterly",
-    memberCount: "5,000 members", 
+    memberCount: "5,000 members",
     varietals: ["Chardonnay", "Cabernet Sauvignon", "Riesling", "Zinfandel"],
     benefits: ["Historic wine library", "Chateau tours", "Member tastings", "Early access"],
     specialty: "Historic Chardonnay and Cabernet",
@@ -125,20 +126,11 @@ const seeds: WineClub[] = [ {
     subRegion: "Calistoga",
     established: 1882,
     website: "https://montelena.com",
-    phone: "(707) 942-5105", 
+    phone: "(707) 942-5105",
     address: "1429 Tubbs Ln, Calistoga CA 94515"
   }
-    ],
-    specialty: "Single Vineyard Expressions",
-    clubType: "collectors",
-    region: "Napa Valley",
-    subRegion: "Carneros",
-    established: 1991,
-    website: "artesawinery.com",
-    phone: "(707) 224-1668",
-    address: "1345 Henry Rd, Napa CA 94559",
-  },
 ]
+
 
 /* -- deterministic catalogue builder to reach 320 + clubs -------------- */
 function buildCatalogue(): WineClub[] {
@@ -163,24 +155,9 @@ function buildCatalogue(): WineClub[] {
 
   // produce additional records by cloning / tweaking the seeds
   while (catalogue.length < 5) {
-    seeds.forEach((s) => {
-      if (catalogue.length >= 320) return
-
-      // Skip creating "Lot" clones for Artesa entries
-      if (s.winery === "Artesa") {
-        return
-      }
-
-      catalogue.push({
-        ...s,
-        id: `${s.id}-clone-${cloneId}`,
-        winery: `${s.winery} Lot ${cloneId}`,
-        clubName: `${s.clubName} ${cloneId}`,
-        subRegion: subRegions[cloneId % subRegions.length],
-        clubType: clubTypes[cloneId % clubTypes.length],
-      })
-      cloneId++
-    })
+  function buildCatalogue(): WineClub[] {
+  return [...seeds] // Just return the 5 authentic clubs
+}
   }
 
   // final alphabetical sort (by winery then clubName)
