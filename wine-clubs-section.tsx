@@ -16,8 +16,16 @@ export default function WineClubsSection() {
   const [wineClubs, setWineClubs] = useState<WineClub[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string>("")
+  const [mounted, setMounted] = useState(false)
+
+  // Fix hydration issue - don't render until client-side
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
+    if (!mounted) return
+    
     console.log("Component loaded - starting data fetch...")
     
     // Start with fallback data immediately
@@ -64,17 +72,17 @@ export default function WineClubsSection() {
     
     // Try Airtable fetch
     fetchFromAirtable()
-  }, [])
+  }, [mounted])
 
   const fetchFromAirtable = async () => {
     console.log("Attempting Airtable connection...")
     
     try {
       const response = await fetch(
-        'https://api.airtable.com/v0/app47CT6F3Yetnnhr/Wine%2520Club%2520Database',
+        'https://api.airtable.com/v0/app47CT6F3Yetnnhr/Wine%20Club%20Database',
         {
           headers: {
-            'Authorization': 'Bearer pat7xz6Iy5D11IVEH.7133fc26526abe828024673967d07439ff8aa135bbad101304e7ac43a8283e74',
+            'Authorization': 'Bearer pat7xz6Iy5D11IVEH',
             'Content-Type': 'application/json',
           },
         }
@@ -110,6 +118,19 @@ export default function WineClubsSection() {
     }
   }
 
+  // Don't render anything until mounted (prevents hydration issues)
+  if (!mounted) {
+    return (
+      <section className="py-20 px-6 bg-slate-100">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center">
+            <div className="animate-pulse">Loading wine clubs...</div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
   return (
     <section className="py-20 px-6 bg-slate-100">
       <div className="max-w-7xl mx-auto">
@@ -138,20 +159,28 @@ export default function WineClubsSection() {
                 </tr>
               </thead>
               <tbody>
-                {wineClubs.map((club, idx) => (
-                  <tr key={idx} className="hover:bg-slate-50">
-                    <td className="py-3 px-4 border-b">{club.wineryClub}</td>
-                    <td className="py-3 px-4 border-b">{club.location}</td>
-                    <td className="py-3 px-4 border-b">{club.varietals}</td>
-                    <td className="py-3 px-4 border-b">{club.priceFreq}</td>
-                    <td className="py-3 px-4 border-b">{club.members}</td>
-                    <td className="py-3 px-4 border-b">
-                      <Button size="sm" className="bg-slate-800 hover:bg-slate-700">
-                        Details
-                      </Button>
+                {loading ? (
+                  <tr>
+                    <td colSpan={6} className="py-8 text-center text-slate-500">
+                      Loading wine clubs...
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  wineClubs.map((club, idx) => (
+                    <tr key={idx} className="hover:bg-slate-50">
+                      <td className="py-3 px-4 border-b">{club.wineryClub}</td>
+                      <td className="py-3 px-4 border-b">{club.location}</td>
+                      <td className="py-3 px-4 border-b">{club.varietals}</td>
+                      <td className="py-3 px-4 border-b">{club.priceFreq}</td>
+                      <td className="py-3 px-4 border-b">{club.members}</td>
+                      <td className="py-3 px-4 border-b">
+                        <Button size="sm" className="bg-slate-800 hover:bg-slate-700">
+                          Details
+                        </Button>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </CardContent>
