@@ -1,4 +1,6 @@
-"use client"
+ "use client"
+   // Force redeploy - test 1
+   export default function WineClubsSection() {"use client"
 
 export default function WineClubsSection() {
   return (
