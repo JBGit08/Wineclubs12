@@ -71,7 +71,7 @@ export default function WineClubsSection() {
     
     try {
       const response = await fetch(
-        'https://api.airtable.com/v0/app47CT6F3Yetnnhr/Wine%20Clubs',
+        'https://api.airtable.com/v0/app47CT6F3Yetnnhr/Wine%20Club%20Database',
         {
           headers: {
             'Authorization': 'Bearer pat7xz6Iy5D11IVEH.7133fc26526abe828024673967d07439ff8aa135bbad101304e7ac43a8283e74',
