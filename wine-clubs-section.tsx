@@ -13,22 +13,11 @@ type WineClub = {
 }
 
 export default function WineClubsSection() {
-  const [wineClubs, setWineClubs] = useState<WineClub[]>([])
-  const [loading, setLoading] = useState(true)
+  const [wineClubs, setWineClubs] = useState<WineClub[] | null>(null)
   const [error, setError] = useState<string>("")
-  const [mounted, setMounted] = useState(false)
-
-  // Fix hydration issue - don't render until client-side
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   useEffect(() => {
-    if (!mounted) return
-    
-    console.log("Component loaded - starting data fetch...")
-    
-    // Start with fallback data immediately
+    // Initialize with fallback data first
     const fallbackData: WineClub[] = [
       {
         wineryClub: "Opus One Membership",
@@ -68,11 +57,14 @@ export default function WineClubsSection() {
     ]
     
     setWineClubs(fallbackData)
-    setLoading(false)
     
-    // Try Airtable fetch
-    fetchFromAirtable()
-  }, [mounted])
+    // Try Airtable after a short delay
+    const timer = setTimeout(() => {
+      fetchFromAirtable()
+    }, 500)
+    
+    return () => clearTimeout(timer)
+  }, [])
 
   const fetchFromAirtable = async () => {
     console.log("Attempting Airtable connection...")
@@ -118,13 +110,13 @@ export default function WineClubsSection() {
     }
   }
 
-  // Don't render anything until mounted (prevents hydration issues)
-  if (!mounted) {
+  // Don't render until we have data (prevents hydration issues)
+  if (wineClubs === null) {
     return (
       <section className="py-20 px-6 bg-slate-100">
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
-            <div className="animate-pulse">Loading wine clubs...</div>
+            <div>Loading wine clubs...</div>
           </div>
         </div>
       </section>
@@ -137,7 +129,7 @@ export default function WineClubsSection() {
         <div className="text-center mb-16">
           <h2 className="text-4xl font-light text-slate-800 mb-4">Napa Valley Wine Clubs</h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-            Browse a comprehensive directory of wine clubs from Napa Valley wineries. Only the main/basic club for each winery is shown.
+            Browse a comprehensive directory of wine clubs from Napa Valley wineries.
           </p>
           {error && (
             <div className="mt-4 text-sm text-amber-600 bg-amber-50 p-2 rounded">
@@ -159,28 +151,20 @@ export default function WineClubsSection() {
                 </tr>
               </thead>
               <tbody>
-                {loading ? (
-                  <tr>
-                    <td colSpan={6} className="py-8 text-center text-slate-500">
-                      Loading wine clubs...
+                {wineClubs.map((club, idx) => (
+                  <tr key={idx} className="hover:bg-slate-50">
+                    <td className="py-3 px-4 border-b">{club.wineryClub}</td>
+                    <td className="py-3 px-4 border-b">{club.location}</td>
+                    <td className="py-3 px-4 border-b">{club.varietals}</td>
+                    <td className="py-3 px-4 border-b">{club.priceFreq}</td>
+                    <td className="py-3 px-4 border-b">{club.members}</td>
+                    <td className="py-3 px-4 border-b">
+                      <Button size="sm" className="bg-slate-800 hover:bg-slate-700">
+                        Details
+                      </Button>
                     </td>
                   </tr>
-                ) : (
-                  wineClubs.map((club, idx) => (
-                    <tr key={idx} className="hover:bg-slate-50">
-                      <td className="py-3 px-4 border-b">{club.wineryClub}</td>
-                      <td className="py-3 px-4 border-b">{club.location}</td>
-                      <td className="py-3 px-4 border-b">{club.varietals}</td>
-                      <td className="py-3 px-4 border-b">{club.priceFreq}</td>
-                      <td className="py-3 px-4 border-b">{club.members}</td>
-                      <td className="py-3 px-4 border-b">
-                        <Button size="sm" className="bg-slate-800 hover:bg-slate-700">
-                          Details
-                        </Button>
-                      </td>
-                    </tr>
-                  ))
-                )}
+                ))}
               </tbody>
             </table>
           </CardContent>
