@@ -39,7 +39,7 @@ type WineClub = {
 const ITEMS_PER_PAGE = 8
 const AIRTABLE_BASE_ID = 'app47CT6F3Yetnnhr'
 const AIRTABLE_TABLE_NAME = 'Wine Club Database'
-const AIRTABLE_API_KEY = 'pat7xz6Iy5D11IVEH'
+const AIRTABLE_API_KEY = 'patRmbt9khuP2ERCW'
 
 /* -------------------------------------------------------------- */
 /* tiny helpers                                                   */
